@@ -14,13 +14,6 @@ internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBou
 {
 	protected override void PreInitialize()
 	{
-		Image background = new(resources.TextureBackground, null)
-		{
-			Layer = -1,
-			Geometry = Screen.Bounds
-		};
-		Root.AddChild(background);
-
 		FlowLayout downflow = new(FlowLayout.Direction.Down)
 		{
 			Geometry = Screen.Bounds
@@ -28,7 +21,7 @@ internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBou
 		Root.AddChild(downflow);
 
 		FlowLayout topflow = new(FlowLayout.Direction.Right);
-		downflow.AddChild(topflow);
+		downflow.AddChild(topflow, 1);
 
 		topflow.AddFiller(4);
 
@@ -41,8 +34,17 @@ internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBou
 
 		topflow.AddFiller(4);
 
-		Field field = new(Keyboard, resources.TextureBall, resources.TexturePaddle, new());
-		downflow.AddChild(field, 9);
+		FillLayout stack = new();
+		downflow.AddChild(stack, 8);
+
+		Image background = new(resources.TextureBackground)
+		{
+			Layer = -1,
+		};
+		stack.AddChild(background);
+
+		Field field = new(Keyboard, resources.TextureBall, resources.TexturePaddle, resources.SfxPing, resources.SfxPong, new());
+		stack.AddChild(field);
 
 		field.ScoreChanged += (oldScore, newScore) =>
 		{
@@ -60,6 +62,8 @@ internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBou
 			}
 			score.Contents = Math.Abs(newScore).ToString();
 		};
+
+		downflow.AddFiller(1);
 
 		Keyboard.KeyEscape.KeyReleased += (k, d) => Exit(parent);
 	}

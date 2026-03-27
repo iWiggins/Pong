@@ -2,6 +2,7 @@
 using GameFrame.Core.Input;
 using GameFrame.Core.Interfaces;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -18,9 +19,9 @@ internal class Field : GeometricComponent, IReset
 	public delegate void ScoreChangedHandler(int oldScore, int newScore);
 	public event ScoreChangedHandler ScoreChanged;
 
-	public Field(Keyboard keyboard, Texture2D ball, Texture2D paddle, Random rand)
+	public Field(Keyboard keyboard, Texture2D ball, Texture2D paddle, SoundEffect ping, SoundEffect pong, Random rand)
 	{
-		Ball = new(this, ball, rand);
+		Ball = new(this, ball, ping, pong, rand);
 		Ball.BallBounced += CheckCollision;
 
 		LeftPaddle = new(this, paddle)

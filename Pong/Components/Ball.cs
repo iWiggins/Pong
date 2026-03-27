@@ -1,11 +1,12 @@
 ﻿using GameFrame.Components;
 using GameFrame.Core.Interfaces;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace Pong.Components;
-internal class Ball(Field field, Texture2D texture, Random rand) : Image(texture), IInitialize, IUpdate, IReset
+internal class Ball(Field field, Texture2D texture, SoundEffect ping, SoundEffect pong, Random rand) : Image(texture), IInitialize, IUpdate, IReset
 {
 	public double Speed { get; set; } = 1;
 	public double Acceleration { get; set; } = 1;
@@ -75,7 +76,20 @@ internal class Ball(Field field, Texture2D texture, Random rand) : Image(texture
 
 	public void Bounce(Wall wall, bool raiseEvent = false)
 	{
-		double deviation = (rand.NextDouble() - 0.5) * Deviance;
+		if(raiseEvent)
+		{
+			pong.Play();
+		}
+		else
+		{
+			float volume = 0.2f * (float)(Math.Abs(_xvelocity) + Math.Abs(_yvelocity));
+			if(volume > 1.0f) volume = 1.0f;
+			var instance = ping.CreateInstance();
+			instance.Volume = volume;
+			instance.Play();
+		}
+
+			double deviation = (rand.NextDouble() - 0.5) * Deviance;
 		double newXvelocity = _xvelocity + _xvelocity * deviation;
 		double newYVelocity = _yvelocity - _yvelocity * deviation;
 		

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 
@@ -16,4 +17,7 @@ internal class ResourceManager(ContentManager content)
 
 	public Song SongMenu => content.Load<Song>("music/menu");
 	public Song SongGame => content.Load<Song>("music/game");
+
+	public SoundEffect SfxPing => content.Load<SoundEffect>("sfx/ping");
+	public SoundEffect SfxPong => content.Load<SoundEffect>("sfx/pong");
 }

@@ -46,6 +46,18 @@
 /processorParam:Quality=Best
 /build:music/menu.ogg
 
+#begin sfx/ping.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/ping.wav
+
+#begin sfx/pong.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx/pong.wav
+
 #begin textures/background.png
 /importer:TextureImporter
 /processor:TextureProcessor
