@@ -7,5 +7,6 @@ using Pong.Frames;
 namespace Pong;
 internal class PongGame : GameFrame.Core.Management.ManagedGame
 {
-	protected override Frame CreateFirstFrame(ContentManager content, SpriteBatch sprites, IBoundsProvider bounds) => new PongCore(content, sprites, bounds);
+	protected override Frame CreateFirstFrame(ContentManager content, SpriteBatch sprites, IBoundsProvider bounds) =>
+		new MainMenu(new(content), sprites, bounds);
 }

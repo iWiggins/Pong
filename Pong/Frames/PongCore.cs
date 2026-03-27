@@ -1,42 +1,70 @@
-﻿using GameFrame.Core;
+﻿using GameFrame.Components;
+using GameFrame.Components.Text;
+using GameFrame.Core;
 using GameFrame.Core.Interfaces;
-using Microsoft.Xna.Framework.Content;
+using GameFrame.Layout;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pong.Components;
 using System;
 
 namespace Pong.Frames;
-internal class PongCore: Frame
+internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBoundsProvider bounds, Frame parent) : Frame(spriteBatch, bounds)
 {
-	public PongCore(ContentManager content, SpriteBatch spriteBatch, IBoundsProvider bounds) : base(spriteBatch, bounds)
+	BoundText score;
+
+	protected override void PreInitialize()  
 	{
-		_rand = new Random();
-		_gameField = new(content.Load<Texture2D>("ball"), _rand)
+		Image background = new(resources.TextureBackground, null, -1)
 		{
-			X = bounds.Bounds.X,
-			Y = bounds.Bounds.Y,
-			Width = bounds.Bounds.Width,
-			Height = bounds.Bounds.Height
+			Geometry = Screen.Bounds
 		};
-	}
-	protected override void PreInitialize()
-	{
-		Keyboard.KeyEscape.KeyPressed += OnEscapeKey;
-		Keyboard.KeySpace.KeyReleased += OnSpacebar;
-		Root.AddChild(_gameField);
+		Root.AddChild(background);
+		FlowLayout downflow = new(FlowLayout.Direction.Down)
+		{
+			Geometry = Screen.Bounds
+		};
+		Root.AddChild(downflow);
+		{
+			FlowLayout topflow = new(FlowLayout.Direction.Right)
+			{
+				Geometry = Screen.Bounds
+			};
+			downflow.AddChild(topflow);
+			{
+				topflow.AddFiller(4);
+				score = new(resources.FontScore)
+				{
+					Color = Color.White,
+					Contents = "0"
+				};
+				topflow.AddChild(score);
+				topflow.AddFiller(4);
+			}
+			Field field = new(Keyboard, resources.TextureBall, resources.TexturePaddle, new())
+			{
+				Geometry = Screen.Bounds
+			};
+			downflow.AddChild(field, 9);
+			field.ScoreChanged += UpdateScore;
+		}
+		Keyboard.KeyEscape.KeyReleased += (k, d) => Exit(parent);
 	}
 
-	private void OnSpacebar(Microsoft.Xna.Framework.Input.Keys key, double duration)
+	private void UpdateScore(int oldScore, int newScore)
 	{
-		_gameField.Ball.Reset();
+		if(newScore < 0)
+		{
+			score.Color = Color.Blue;
+		}
+		else if(newScore > 0)
+		{
+			score.Color = Color.Red;
+		}
+		else
+		{
+			score.Color = Color.White;
+		}
+		score.Contents = Math.Abs(newScore).ToString();
 	}
-	private void OnEscapeKey(Microsoft.Xna.Framework.Input.Keys key)
-	{
-		Exit(null);
-	}
-
-	private readonly Field _gameField;
-	private readonly Random _rand;
-
-	
 }

@@ -5,38 +5,44 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace Pong.Components;
-internal class Ball(Field field, Texture2D texture, Random rand): Image(texture, field), IInitialize, IUpdate
+internal class Ball(Field field, Texture2D texture, Random rand) : Image(texture), IInitialize, IUpdate, IReset
 {
-	public const int BALL_SPEED_DIVISOR = 2000;
-	public const int BALL_SCALE_DIVISOR = 20;
+	public double Speed { get; set; } = 1;
+	public double Acceleration { get; set; } = 1;
+	public double Scale { get; set; } = 1;
+	public double Deviance { get; set; } = 0.2;
 
 	public delegate void BallBounceHandler(Wall wall);
 	public event BallBounceHandler BallBounced;
 
-	public int Speed { get; private set; }
-
-	/// <summary>
-	/// The angle of the ball's movement in radians.
-	/// </summary>
-	public double Angle { get; private set; }
+	public bool Initialized { get; private set; } = false;
 
 	/// <summary>
 	/// Return the ball to starting position, reset speed, and randomize angle.
 	/// </summary>
 	public void Reset()
 	{
-		Speed = field.Geometry.Width / BALL_SPEED_DIVISOR;
-		Angle = rand.NextDouble() * 2 * Math.PI;
-		RecalculateVelocity();
-		Height = field.Height / BALL_SCALE_DIVISOR;
+		double speed = field.Geometry.Width  * Speed / 5000;
+
+		int direction = rand.NextDouble() > 0.5 ? 1 : -1;
+
+		double xVector = speed * rand.NextDouble();
+		double yVector = 1 - xVector;
+
+		_xvelocity = speed * xVector * direction;
+		_yvelocity = speed * yVector;
+
+		
+		Height = (int)(field.Height * Scale / 20);
 		Width = Height;
-		var c = field.Center;
-		//X = c.X;
-		//Y = c.Y;
-		SetCenter(c.X, c.Y);
+		SetCenter(field.Center);
 	}
 
-	public void Initialize() => Reset();
+	public void Initialize()
+	{
+		Reset();
+		Initialized = true;
+	}
 
 	public void Update(GameTime time)
 	{
@@ -45,24 +51,34 @@ internal class Ball(Field field, Texture2D texture, Random rand): Image(texture,
 
 		if(_xvelocity > 0)
 		{
-			if(Geometry.Right > field.Geometry.Right) Bounce(Wall.Right);
+			_xvelocity += Acceleration / 1000;
+			if(HitRightPaddle) Bounce(Wall.Right, false);
+			else if(HitRightWall) Bounce(Wall.Right, true);
 		}
 		else
 		{
-			if(Geometry.Left < field.Geometry.Left) Bounce(Wall.Left);
+			_xvelocity -= Acceleration / 1000;
+			if(HitLeftPaddle) Bounce(Wall.Left, false);
+			else if(HitLeftWall) Bounce(Wall.Left, true);
 		}
 		if(_yvelocity > 0)
 		{
-			if(Geometry.Bottom > field.Geometry.Bottom) Bounce(Wall.Botton);
+			_yvelocity += Acceleration / 1000;
+			if(Geometry.Bottom > field.Geometry.Bottom) Bounce(Wall.Botton, false);
 		}
 		else
 		{
-			if(Geometry.Top < field.Geometry.Top) Bounce(Wall.Top);
+			_yvelocity -= Acceleration / 1000;
+			if(Geometry.Top < field.Geometry.Top) Bounce(Wall.Top, false);
 		}
 	}
 
-	public void Bounce(Wall wall)
+	public void Bounce(Wall wall, bool raiseEvent = false)
 	{
+		double deviation = (rand.NextDouble() - 0.5) * Deviance;
+		double newXvelocity = _xvelocity + _xvelocity * deviation;
+		double newYVelocity = _yvelocity - _yvelocity * deviation;
+		
 		switch(wall)
 		{
 			case Wall.Left:
@@ -74,23 +90,18 @@ internal class Ball(Field field, Texture2D texture, Random rand): Image(texture,
 				_yvelocity = -_yvelocity;
 				break;
 		}
-		RecalculateAngle();
-		if(BallBounced is not null) BallBounced(wall);
+		if(raiseEvent && BallBounced is not null) BallBounced(wall);
 	}
 
-	private void RecalculateVelocity()
-	{
-		_xvelocity = Math.Cos(Angle) * Speed;
-		_yvelocity = Math.Tan(Angle) * Speed;
-	}
+	private bool HitLeftWall => Left < field.Left;
+	private bool HitRightWall => Right > field.Right;
 
-	private void RecalculateAngle()
-	{
-		// There is a way to do this geometrically,
-		// instead of trigonometrically.
-		// TODO: Optimize this.
-		Angle = Math.Asin(_yvelocity / _xvelocity);
-	}
+	private bool HitLeftPaddle =>
+		Left < field.LeftPaddle.Right && Top < field.LeftPaddle.Bottom && Bottom > field.LeftPaddle.Top;
+	private bool HitRightPaddle =>
+		Right > field.RightPaddle.Left && Top < field.RightPaddle.Bottom && Bottom > field.RightPaddle.Top;
+
+
 
 	private double _xvelocity;
 	private double _yvelocity;
