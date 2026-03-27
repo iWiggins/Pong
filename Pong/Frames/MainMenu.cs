@@ -24,61 +24,52 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 			Geometry = Screen.Bounds
 		};
 		Root.AddChild(mainLayout);
+		mainLayout.AddFiller();
+
+		FlowLayout topLayout = new(FlowLayout.Direction.Left);
+		mainLayout.AddChild(topLayout, 4);
+		topLayout.AddFiller(4);
+
+		BoundText title = new(resources.FontTitle)
 		{
-			mainLayout.AddFiller();
+			Contents = "Pong",
+			Color = Color.White
+		};
+		topLayout.AddChild(title, 4);
+		topLayout.AddFiller(4);
 
-			FlowLayout topLayout = new(FlowLayout.Direction.Left);
-			mainLayout.AddChild(topLayout, 4);
-			{
-				topLayout.AddFiller(4);
+		mainLayout.AddFiller();
 
-				BoundText title = new(resources.FontTitle)
-				{
-					Contents = "Pong",
-					Color = Color.White
-				};
-				topLayout.AddChild(title, 4);
-				topLayout.AddFiller(4);
-			}
+		FlowLayout buttonLayout = new(FlowLayout.Direction.Left);
+		mainLayout.AddChild(buttonLayout, 2);
+		buttonLayout.AddFiller(2);
 
-			mainLayout.AddFiller();
+		HoverTextImageButton startButton = new(resources.FontButton, resources.TextureButton)
+		{
+			Contents = "Start",
+			NormalColor = Color.Red,
+			TextNormalColor = Color.Blue,
+			HoverColor = Color.Blue,
+			TextHoverColor = Color.Red
+		};
+		startButton.Released += (b, p, dt) => Exit(new PongCore(resources, SpriteBatch, Screen, this));
+		buttonLayout.AddChild(startButton, 2);
 
-			FlowLayout buttonLayout = new(FlowLayout.Direction.Left);
-			mainLayout.AddChild(buttonLayout, 2);
-			{
-				buttonLayout.AddFiller(2);
+		buttonLayout.AddFiller(2);
 
-				HoverTextImageButton startButton = new(resources.FontButton, resources.TextureButton)
-				{
-					Contents = "Start",
-					NormalColor = Color.Red,
-					TextNormalColor = Color.Blue,
-					HoverColor = Color.Blue,
-					TextHoverColor = Color.Red
-				};
-				startButton.Released += (b, p, dt) => Exit(new PongCore(resources, SpriteBatch, Screen, this));
-				buttonLayout.AddChild(startButton, 2);
+		HoverTextImageButton quitButton = new(resources.FontButton, resources.TextureButton)
+		{
+			Contents = "Quit",
+			NormalColor = Color.Red,
+			TextNormalColor = Color.Blue,
+			HoverColor = Color.Blue,
+			TextHoverColor = Color.Red
+		};
+		quitButton.Released += (b, p, dt) => Exit(null);
+		buttonLayout.AddChild(quitButton, 2);
 
-				buttonLayout.AddFiller(2);
+		buttonLayout.AddFiller(2);
 
-				HoverTextImageButton quitButton = new(resources.FontButton, resources.TextureButton)
-				{
-					Contents = "Quit",
-					NormalColor = Color.Red,
-					TextNormalColor = Color.Blue,
-					HoverColor = Color.Blue,
-					TextHoverColor = Color.Red
-				};
-				quitButton.Released += (b, p, dt) => Exit(null);
-				buttonLayout.AddChild(quitButton, 2);
-
-				buttonLayout.AddFiller(2);
-			}
-
-			mainLayout.AddFiller();
-		}
-
-		
-
+		mainLayout.AddFiller();
 	}
 }

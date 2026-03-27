@@ -11,9 +11,7 @@ using System;
 namespace Pong.Frames;
 internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBoundsProvider bounds, Frame parent) : Frame(spriteBatch, bounds)
 {
-	BoundText score;
-
-	protected override void PreInitialize()  
+	protected override void PreInitialize()
 	{
 		Image background = new(resources.TextureBackground, null)
 		{
@@ -26,46 +24,42 @@ internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBou
 			Geometry = Screen.Bounds
 		};
 		Root.AddChild(downflow);
+		FlowLayout topflow = new(FlowLayout.Direction.Right)
 		{
-			FlowLayout topflow = new(FlowLayout.Direction.Right)
-			{
-				Geometry = Screen.Bounds
-			};
-			downflow.AddChild(topflow);
-			{
-				topflow.AddFiller(4);
-				score = new(resources.FontScore)
-				{
-					Color = Color.White,
-					Contents = "0"
-				};
-				topflow.AddChild(score);
-				topflow.AddFiller(4);
-			}
-			Field field = new(Keyboard, resources.TextureBall, resources.TexturePaddle, new())
-			{
-				Geometry = Screen.Bounds
-			};
-			downflow.AddChild(field, 9);
-			field.ScoreChanged += UpdateScore;
-		}
-		Keyboard.KeyEscape.KeyReleased += (k, d) => Exit(parent);
-	}
+			Geometry = Screen.Bounds
+		};
+		downflow.AddChild(topflow);
+		topflow.AddFiller(4);
+		BoundText score = new(resources.FontScore)
+		{
+			Color = Color.White,
+			Contents = "0"
+		};
+		topflow.AddChild(score);
+		topflow.AddFiller(4);
+		Field field = new(Keyboard, resources.TextureBall, resources.TexturePaddle, new())
+		{
+			Geometry = Screen.Bounds
+		};
+		downflow.AddChild(field, 9);
 
-	private void UpdateScore(int oldScore, int newScore)
-	{
-		if(newScore < 0)
+		field.ScoreChanged += (oldScore, newScore) =>
 		{
-			score.Color = Color.Blue;
-		}
-		else if(newScore > 0)
-		{
-			score.Color = Color.Red;
-		}
-		else
-		{
-			score.Color = Color.White;
-		}
-		score.Contents = Math.Abs(newScore).ToString();
+			if(newScore < 0)
+			{
+				score.Color = Color.Blue;
+			}
+			else if(newScore > 0)
+			{
+				score.Color = Color.Red;
+			}
+			else
+			{
+				score.Color = Color.White;
+			}
+			score.Contents = Math.Abs(newScore).ToString();
+		};
+
+		Keyboard.KeyEscape.KeyReleased += (k, d) => Exit(parent);
 	}
 }
