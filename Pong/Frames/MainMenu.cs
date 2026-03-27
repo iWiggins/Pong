@@ -32,7 +32,7 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 		FlowLayout mainLayout = new(FlowLayout.Direction.Down);
 		stack.AddChild(mainLayout);
 
-		FlowLayout topLayout = new(FlowLayout.Direction.Left);
+		FlowLayout topLayout = new(FlowLayout.Direction.Right);
 		mainLayout.AddChild(topLayout, 4);
 		topLayout.AddFiller(4);
 
@@ -46,22 +46,36 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 
 		mainLayout.AddFiller();
 
-		FlowLayout buttonLayout = new(FlowLayout.Direction.Left);
+		FlowLayout buttonLayout = new(FlowLayout.Direction.Right);
 		mainLayout.AddChild(buttonLayout, 2);
-		buttonLayout.AddFiller(2);
+		
+		buttonLayout.AddFiller(1);
 
-		HoverTextImageButton startButton = new(resources.FontButton, resources.TextureButton)
+		HoverTextImageButton soloButton = new(resources.FontButton, resources.TextureButton)
 		{
-			Contents = "Start",
+			Contents = "One Player",
 			NormalColor = Color.Red,
 			TextNormalColor = Color.Blue,
 			HoverColor = Color.Blue,
 			TextHoverColor = Color.Red
 		};
-		startButton.Released += (b, p, dt) => Exit(new PongCore(resources, SpriteBatch, Screen, this));
-		buttonLayout.AddChild(startButton, 2);
+		soloButton.Released += (b, p, dt) => Exit(new PongCore(resources, SpriteBatch, Screen, this, true));
+		buttonLayout.AddChild(soloButton, 2);
 
-		buttonLayout.AddFiller(2);
+		buttonLayout.AddFiller(1);
+
+		HoverTextImageButton duoButton = new(resources.FontButton, resources.TextureButton)
+		{
+			Contents = "Two Player",
+			NormalColor = Color.Red,
+			TextNormalColor = Color.Blue,
+			HoverColor = Color.Blue,
+			TextHoverColor = Color.Red
+		};
+		duoButton.Released += (b, p, dt) => Exit(new PongCore(resources, SpriteBatch, Screen, this, false));
+		buttonLayout.AddChild(duoButton, 2);
+
+		buttonLayout.AddFiller(1);
 
 		HoverTextImageButton quitButton = new(resources.FontButton, resources.TextureButton)
 		{
@@ -74,7 +88,7 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 		quitButton.Released += (b, p, dt) => Exit(null);
 		buttonLayout.AddChild(quitButton, 2);
 
-		buttonLayout.AddFiller(2);
+		buttonLayout.AddFiller(1);
 
 	}
 

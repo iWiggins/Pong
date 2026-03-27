@@ -10,7 +10,7 @@ using Pong.Components;
 using System;
 
 namespace Pong.Frames;
-internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBoundsProvider bounds, Frame parent) : Frame(spriteBatch, bounds)
+internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBoundsProvider bounds, Frame parent, bool AI) : Frame(spriteBatch, bounds)
 {
 	protected override void PreInitialize()
 	{
@@ -43,7 +43,7 @@ internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBou
 		};
 		stack.AddChild(background);
 
-		Field field = new(Keyboard, resources.TextureBall, resources.TexturePaddle, resources.SfxPing, resources.SfxPong, new());
+		Field field = new(Keyboard, resources.TextureBall, resources.TexturePaddle, resources.SfxPing, resources.SfxPong, AI, new());
 		stack.AddChild(field);
 
 		field.ScoreChanged += (oldScore, newScore) =>

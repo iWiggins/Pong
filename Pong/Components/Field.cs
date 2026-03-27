@@ -17,9 +17,9 @@ internal class Field : GeometricComponent, IReset
 	public int Score { get; private set; } = 0;
 
 	public delegate void ScoreChangedHandler(int oldScore, int newScore);
-	public event ScoreChangedHandler ScoreChanged;
+	public event ScoreChangedHandler? ScoreChanged;
 
-	public Field(Keyboard keyboard, Texture2D ball, Texture2D paddle, SoundEffect ping, SoundEffect pong, Random rand)
+	public Field(Keyboard keyboard, Texture2D ball, Texture2D paddle, SoundEffect ping, SoundEffect pong, bool AI, Random rand)
 	{
 		Ball = new(this, ball, ping, pong, rand);
 		Ball.BallBounced += CheckCollision;
@@ -39,10 +39,18 @@ internal class Field : GeometricComponent, IReset
 			Side = Wall.Right,
 			Color = Color.Blue
 		};
-		keyboard.KeyUp.KeyPressed += k => RightPaddle.MoveUp();
-		keyboard.KeyUp.KeyReleased += (k, d) => RightPaddle.Stop();
-		keyboard.KeyDown.KeyPressed += k => RightPaddle.MoveDown();
-		keyboard.KeyDown.KeyReleased += (k, d) => RightPaddle.Stop();
+		if(AI)
+		{
+			_ai = new(Ball, RightPaddle, this, 2);
+		}
+		else
+		{
+			_ai = null;
+			keyboard.KeyUp.KeyPressed += k => RightPaddle.MoveUp();
+			keyboard.KeyUp.KeyReleased += (k, d) => RightPaddle.Stop();
+			keyboard.KeyDown.KeyPressed += k => RightPaddle.MoveDown();
+			keyboard.KeyDown.KeyReleased += (k, d) => RightPaddle.Stop();
+		}
 	}
 
 	public void Reset()
@@ -77,11 +85,22 @@ internal class Field : GeometricComponent, IReset
 		if(ScoreChanged is not null && oldScore != Score) ScoreChanged(oldScore, Score);
 	}
 
-	public override IEnumerable<IComponent> Children => [Ball, LeftPaddle, RightPaddle];
+	public override IEnumerable<IComponent> Children
+	{
+		get
+		{
+			yield return Ball;
+			yield return LeftPaddle;
+			yield return RightPaddle;
+			if(_ai is not null) yield return _ai;
+		}
+	}
 
 	public override bool HasChildren => true;
 
 	public override bool AddChild(IComponent component) => false;
 	public override void Invalidate() { }
 	public override bool RemoveChild(IComponent component) => false;
+
+	private readonly PongAI? _ai;
 }
