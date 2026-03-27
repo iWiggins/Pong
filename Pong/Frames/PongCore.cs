@@ -39,11 +39,8 @@ internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBou
 		topflow.AddChild(score);
 
 		topflow.AddFiller(4);
-		
-		Field field = new(Keyboard, resources.TextureBall, resources.TexturePaddle, new())
-		{
-			Geometry = Screen.Bounds
-		};
+
+		Field field = new(Keyboard, resources.TextureBall, resources.TexturePaddle, new());
 		downflow.AddChild(field, 9);
 
 		field.ScoreChanged += (oldScore, newScore) =>
