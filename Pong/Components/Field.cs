@@ -59,6 +59,7 @@ internal class Field : GeometricComponent, IReset
 	private void CheckCollision(Wall wall)
 	{
 		int oldScore = Score;
+		if(Ball.Speed < 3) Ball.Speed *= 1.2;
 		switch(wall)
 		{
 			case Wall.Left:

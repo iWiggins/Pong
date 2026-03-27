@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace Pong;
 internal class ResourceManager(ContentManager content)
@@ -12,4 +13,7 @@ internal class ResourceManager(ContentManager content)
 	public SpriteFont FontTitle => content.Load<SpriteFont>("fonts/title");
 	public SpriteFont FontButton => content.Load<SpriteFont>("fonts/button");
 	public SpriteFont FontScore => content.Load<SpriteFont>("fonts/score");
+
+	public Song SongMenu => content.Load<Song>("music/menu");
+	public Song SongGame => content.Load<Song>("music/game");
 }

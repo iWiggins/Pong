@@ -6,6 +6,7 @@ using GameFrame.Core.Interfaces;
 using GameFrame.Layout;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace Pong.Frames;
 internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBoundsProvider bounds) : Frame(spriteBatch, bounds)
@@ -71,5 +72,20 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 		buttonLayout.AddFiller(2);
 
 		mainLayout.AddFiller();
+	}
+
+	protected override void PostInitialize() => StartMusic();
+	protected override void PostReset() => StartMusic();
+
+	void StartMusic()
+	{
+		Song music = resources.SongMenu;
+
+		MediaPlayer.IsRepeating = true;
+		if(MediaPlayer.State == MediaState.Playing)
+		{
+			MediaPlayer.Stop();
+		}
+		MediaPlayer.Play(music);
 	}
 }

@@ -5,6 +5,7 @@ using GameFrame.Core.Interfaces;
 using GameFrame.Layout;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using Pong.Components;
 using System;
 
@@ -61,5 +62,20 @@ internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBou
 		};
 
 		Keyboard.KeyEscape.KeyReleased += (k, d) => Exit(parent);
+	}
+
+	protected override void PostInitialize() => StartMusic();
+	protected override void PostReset() => StartMusic();
+
+	void StartMusic()
+	{
+		Song music = resources.SongGame;
+
+		MediaPlayer.IsRepeating = true;
+		if(MediaPlayer.State == MediaState.Playing)
+		{
+			MediaPlayer.Stop();
+		}
+		MediaPlayer.Play(music);
 	}
 }

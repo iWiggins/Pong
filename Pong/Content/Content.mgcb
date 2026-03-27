@@ -34,6 +34,18 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/title.spritefont
 
+#begin music/game.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/game.ogg
+
+#begin music/menu.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:music/menu.ogg
+
 #begin textures/background.png
 /importer:TextureImporter
 /processor:TextureProcessor
