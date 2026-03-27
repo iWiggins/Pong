@@ -37,6 +37,8 @@ internal class Ball(Field field, Texture2D texture, SoundEffect ping, SoundEffec
 		Height = (int)(field.Height * Scale / 20);
 		Width = Height;
 		SetCenter(field.Center);
+
+		Color = Color.White;
 	}
 
 	public void Initialize()
@@ -96,7 +98,11 @@ internal class Ball(Field field, Texture2D texture, SoundEffect ping, SoundEffec
 		switch(wall)
 		{
 			case Wall.Left:
+				Color = Color.Red;
+				_xvelocity = -_xvelocity;
+				break;
 			case Wall.Right:
+				Color = Color.Blue;
 				_xvelocity = -_xvelocity;
 				break;
 			case Wall.Top:

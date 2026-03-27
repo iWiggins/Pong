@@ -13,19 +13,24 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 {
 	protected override void PreInitialize()
 	{
-		Image background = new(resources.TextureBackground, null)
+		FlowLayout outerLayout = new(FlowLayout.Direction.Down)
 		{
-			Layer = -1,
 			Geometry = Screen.Bounds
 		};
-		Root.AddChild(background);
+		Root.AddChild(outerLayout);
 
-		FlowLayout mainLayout = new(FlowLayout.Direction.Down)
-		{
-			Geometry = Screen.Bounds
-		};
-		Root.AddChild(mainLayout);
-		mainLayout.AddFiller();
+		outerLayout.AddFiller();
+
+		FillLayout stack = new();
+		outerLayout.AddChild(stack, 8);
+
+		outerLayout.AddFiller();
+
+		Image background = new(resources.TextureBackground, null);
+		stack.AddChild(background);
+
+		FlowLayout mainLayout = new(FlowLayout.Direction.Down);
+		stack.AddChild(mainLayout);
 
 		FlowLayout topLayout = new(FlowLayout.Direction.Left);
 		mainLayout.AddChild(topLayout, 4);
@@ -71,7 +76,6 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 
 		buttonLayout.AddFiller(2);
 
-		mainLayout.AddFiller();
 	}
 
 	protected override void PostInitialize() => StartMusic();
