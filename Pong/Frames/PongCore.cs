@@ -15,8 +15,9 @@ internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBou
 
 	protected override void PreInitialize()  
 	{
-		Image background = new(resources.TextureBackground, null, -1)
+		Image background = new(resources.TextureBackground, null)
 		{
+			Layer = -1,
 			Geometry = Screen.Bounds
 		};
 		Root.AddChild(background);
