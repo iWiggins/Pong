@@ -19,24 +19,27 @@ internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBou
 			Geometry = Screen.Bounds
 		};
 		Root.AddChild(background);
+
 		FlowLayout downflow = new(FlowLayout.Direction.Down)
 		{
 			Geometry = Screen.Bounds
 		};
 		Root.AddChild(downflow);
-		FlowLayout topflow = new(FlowLayout.Direction.Right)
-		{
-			Geometry = Screen.Bounds
-		};
+
+		FlowLayout topflow = new(FlowLayout.Direction.Right);
 		downflow.AddChild(topflow);
+
 		topflow.AddFiller(4);
+
 		BoundText score = new(resources.FontScore)
 		{
 			Color = Color.White,
 			Contents = "0"
 		};
 		topflow.AddChild(score);
+
 		topflow.AddFiller(4);
+		
 		Field field = new(Keyboard, resources.TextureBall, resources.TexturePaddle, new())
 		{
 			Geometry = Screen.Bounds
