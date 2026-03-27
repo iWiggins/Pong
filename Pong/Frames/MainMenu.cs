@@ -8,10 +8,18 @@ using GameFrame.Layout;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using Pong.Data;
 
 namespace Pong.Frames;
 internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBoundsProvider bounds) : Frame(spriteBatch, bounds)
 {
+	public readonly PongSettings Settings = new()
+	{
+		LeftPaddle = Controller.WASD,
+		RightPaddle = Controller.Arrows,
+		Volume = 10
+	};
+
 	protected override void PreInitialize()
 	{
 		int cursorSize = Screen.Bounds.Height / 50;
@@ -47,7 +55,7 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 		BoundText title = new(resources.FontTitle)
 		{
 			Contents = "Pong",
-			Color = Color.White
+			Color = Palette.Neutral
 		};
 		topLayout.AddChild(title, 4);
 		topLayout.AddFiller(4);
@@ -59,39 +67,39 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 		
 		buttonLayout.AddFiller(1);
 
-		HoverTextImageButton soloButton = new(resources.FontButton, resources.TextureButton)
+		HoverTextImageButton playButton = new(resources.FontButton, resources.TextureButton)
 		{
-			Contents = "One Player",
-			NormalColor = Color.Red,
-			TextNormalColor = Color.Blue,
-			HoverColor = Color.Blue,
-			TextHoverColor = Color.Red
+			Contents = "Play",
+			NormalColor = Palette.LeftPaddle,
+			TextNormalColor = Palette.RightPaddle,
+			HoverColor = Palette.RightPaddle,
+			TextHoverColor = Palette.LeftPaddle
 		};
-		soloButton.Released += (b, p, dt) => Exit(new PongCore(resources, SpriteBatch, Screen, Mouse.Cursor, this, true));
-		buttonLayout.AddChild(soloButton, 2);
+		playButton.Released += (b, p, dt) => Exit(new PongCore(resources, SpriteBatch, Screen, Mouse.Cursor, this, Settings));
+		buttonLayout.AddChild(playButton, 2);
 
 		buttonLayout.AddFiller(1);
 
-		HoverTextImageButton duoButton = new(resources.FontButton, resources.TextureButton)
+		HoverTextImageButton optionsButton = new(resources.FontButton, resources.TextureButton)
 		{
-			Contents = "Two Player",
-			NormalColor = Color.Red,
-			TextNormalColor = Color.Blue,
-			HoverColor = Color.Blue,
-			TextHoverColor = Color.Red
+			Contents = "Options",
+			NormalColor = Palette.LeftPaddle,
+			TextNormalColor = Palette.RightPaddle,
+			HoverColor = Palette.RightPaddle,
+			TextHoverColor = Palette.LeftPaddle
 		};
-		duoButton.Released += (b, p, dt) => Exit(new PongCore(resources, SpriteBatch, Screen, Mouse.Cursor, this, false));
-		buttonLayout.AddChild(duoButton, 2);
+		optionsButton.Released += (b, p, dt) => Exit(new OptionsMenu(resources, SpriteBatch, Screen, Settings, this));
+		buttonLayout.AddChild(optionsButton, 2);
 
 		buttonLayout.AddFiller(1);
 
 		HoverTextImageButton quitButton = new(resources.FontButton, resources.TextureButton)
 		{
 			Contents = "Quit",
-			NormalColor = Color.Red,
-			TextNormalColor = Color.Blue,
-			HoverColor = Color.Blue,
-			TextHoverColor = Color.Red
+			NormalColor = Palette.LeftPaddle,
+			TextNormalColor = Palette.RightPaddle,
+			HoverColor = Palette.RightPaddle,
+			TextHoverColor = Palette.LeftPaddle
 		};
 		quitButton.Released += (b, p, dt) => Exit(null);
 		buttonLayout.AddChild(quitButton, 2);
@@ -116,6 +124,7 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 		{
 			MediaPlayer.Stop();
 		}
+		MediaPlayer.Volume = Settings.Volume / 10.0f;
 		MediaPlayer.Play(music);
 	}
 }

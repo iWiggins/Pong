@@ -3,6 +3,7 @@ using GameFrame.Core.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using Pong.Data;
 using System;
 
 namespace Pong.Components;
@@ -12,6 +13,7 @@ internal class Ball(Field field, Texture2D texture, SoundEffect ping, SoundEffec
 	public double Acceleration { get; set; } = 1;
 	public double Scale { get; set; } = 1;
 	public double Deviance { get; set; } = 0.2;
+	public int Volume { get; set; } = 10;
 
 	public delegate void BallBounceHandler(Wall wall);
 	public event BallBounceHandler? BallBounced;
@@ -38,7 +40,7 @@ internal class Ball(Field field, Texture2D texture, SoundEffect ping, SoundEffec
 		Width = Height;
 		SetCenter(field.Center);
 
-		Color = Color.White;
+		Color = Palette.Neutral;
 	}
 
 	public void Initialize()
@@ -80,11 +82,12 @@ internal class Ball(Field field, Texture2D texture, SoundEffect ping, SoundEffec
 	{
 		if(raiseEvent)
 		{
-			pong.Play();
+			var instance = pong.CreateInstance();
+			instance.Volume = Volume / 10.0f;
 		}
 		else
 		{
-			float volume = 0.2f * (float)(Math.Abs(_xvelocity) + Math.Abs(_yvelocity));
+			float volume = 0.2f * (float)(Math.Abs(_xvelocity) + Math.Abs(_yvelocity)) * Volume / 10.0f;
 			if(volume > 1.0f) volume = 1.0f;
 			var instance = ping.CreateInstance();
 			instance.Volume = volume;
@@ -98,11 +101,11 @@ internal class Ball(Field field, Texture2D texture, SoundEffect ping, SoundEffec
 		switch(wall)
 		{
 			case Wall.Left:
-				Color = Color.Red;
+				Color = Palette.LeftPaddle;
 				_xvelocity = -_xvelocity;
 				break;
 			case Wall.Right:
-				Color = Color.Blue;
+				Color = Palette.RightPaddle;
 				_xvelocity = -_xvelocity;
 				break;
 			case Wall.Top:

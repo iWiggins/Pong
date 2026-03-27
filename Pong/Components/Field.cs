@@ -4,6 +4,7 @@ using GameFrame.Core.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using Pong.Data;
 using System;
 using System.Collections.Generic;
 
@@ -19,38 +20,28 @@ internal class Field : GeometricComponent, IReset
 	public delegate void ScoreChangedHandler(int oldScore, int newScore);
 	public event ScoreChangedHandler? ScoreChanged;
 
-	public Field(Keyboard keyboard, Texture2D ball, Texture2D paddle, SoundEffect ping, SoundEffect pong, bool AI, Random rand)
+	public Field(Keyboard keyboard, Texture2D ball, Texture2D paddle, SoundEffect ping, SoundEffect pong, PongSettings settings, Random rand)
 	{
 		Ball = new(this, ball, ping, pong, rand);
 		Ball.BallBounced += CheckCollision;
+		_children.Add(Ball);
 
 		LeftPaddle = new(this, paddle)
 		{
 			Side = Wall.Left,
-			Color = Color.Red
+			Color = Palette.LeftPaddle
 		};
-		keyboard.KeyW.KeyPressed += k => LeftPaddle.MoveUp();
-		keyboard.KeyW.KeyReleased += (k, d) => LeftPaddle.Stop();
-		keyboard.KeyS.KeyPressed += k => LeftPaddle.MoveDown();
-		keyboard.KeyS.KeyReleased += (k, d) => LeftPaddle.Stop();
+		AddControls(LeftPaddle, keyboard, settings.LeftPaddle);
+		_children.Add(LeftPaddle);
+		
 
 		RightPaddle = new(this, paddle)
 		{
 			Side = Wall.Right,
-			Color = Color.Blue
+			Color = Palette.RightPaddle
 		};
-		if(AI)
-		{
-			_ai = new(Ball, RightPaddle, this, 1.5);
-		}
-		else
-		{
-			_ai = null;
-			keyboard.KeyUp.KeyPressed += k => RightPaddle.MoveUp();
-			keyboard.KeyUp.KeyReleased += (k, d) => RightPaddle.Stop();
-			keyboard.KeyDown.KeyPressed += k => RightPaddle.MoveDown();
-			keyboard.KeyDown.KeyReleased += (k, d) => RightPaddle.Stop();
-		}
+		AddControls(RightPaddle, keyboard, settings.RightPaddle);
+		_children.Add(RightPaddle);		
 	}
 
 	public void Reset()
@@ -83,16 +74,7 @@ internal class Field : GeometricComponent, IReset
 		if(ScoreChanged is not null && oldScore != Score) ScoreChanged(oldScore, Score);
 	}
 
-	public override IEnumerable<IComponent> Children
-	{
-		get
-		{
-			yield return Ball;
-			yield return LeftPaddle;
-			yield return RightPaddle;
-			if(_ai is not null) yield return _ai;
-		}
-	}
+	public override IEnumerable<IComponent> Children => _children;
 
 	public override bool HasChildren => true;
 
@@ -100,5 +82,41 @@ internal class Field : GeometricComponent, IReset
 	public override void Invalidate() { }
 	public override bool RemoveChild(IComponent component) => false;
 
-	private readonly PongAI? _ai;
+	private void AddControls(Paddle paddle, Keyboard keyboard, Controller controller)
+	{
+		switch(controller)
+		{
+			case Controller.WASD:
+				AddWASD(paddle, keyboard);
+				break;
+			case Controller.Arrows:
+				AddArrows(paddle, keyboard);
+				break;
+			case Controller.CPU:
+			default:
+				AddCPU(paddle);
+				break;
+		}
+	}
+
+	private void AddWASD(Paddle paddle, Keyboard keyboard)
+	{
+		keyboard.KeyW.KeyPressed += k => paddle.MoveUp();
+		keyboard.KeyW.KeyReleased += (k, d) => paddle.Stop();
+		keyboard.KeyS.KeyPressed += k => paddle.MoveDown();
+		keyboard.KeyS.KeyReleased += (k, d) => paddle.Stop();
+	}
+
+	private void AddArrows(Paddle paddle, Keyboard keyboard)
+	{
+		keyboard.KeyUp.KeyPressed += k => paddle.MoveUp();
+		keyboard.KeyUp.KeyReleased += (k, d) => paddle.Stop();
+		keyboard.KeyDown.KeyPressed += k => paddle.MoveDown();
+		keyboard.KeyDown.KeyReleased += (k, d) => paddle.Stop();
+	}
+
+	private void AddCPU(Paddle paddle) =>
+		_children.Add(new PongAI(Ball, paddle, this, 2));
+
+	private readonly List<IComponent> _children = [];
 }

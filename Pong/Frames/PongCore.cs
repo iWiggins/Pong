@@ -8,10 +8,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Pong.Components;
+using Pong.Data;
 using System;
 
 namespace Pong.Frames;
-internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBoundsProvider bounds, IMouseCursor cursor, Frame parent, bool AI) : Frame(spriteBatch, bounds)
+internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBoundsProvider bounds, IMouseCursor cursor, Frame parent, PongSettings settings) : Frame(spriteBatch, bounds)
 {
 	protected override void PreInitialize()
 	{
@@ -28,9 +29,9 @@ internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBou
 
 		topflow.AddFiller(4);
 
-		BoundText score = new(resources.FontScore)
+		BoundText score = new(resources.FontNumber)
 		{
-			Color = Color.White,
+			Color = Palette.Neutral,
 			Contents = "0"
 		};
 		topflow.AddChild(score);
@@ -46,22 +47,22 @@ internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBou
 		};
 		stack.AddChild(background);
 
-		Field field = new(Keyboard, resources.TextureBall, resources.TexturePaddle, resources.SfxPing, resources.SfxPong, AI, new());
+		Field field = new(Keyboard, resources.TextureBall, resources.TexturePaddle, resources.SfxPing, resources.SfxPong, settings, new());
 		stack.AddChild(field);
 
 		field.ScoreChanged += (oldScore, newScore) =>
 		{
 			if(newScore < 0)
 			{
-				score.Color = Color.Blue;
+				score.Color = Palette.RightPaddle;
 			}
 			else if(newScore > 0)
 			{
-				score.Color = Color.Red;
+				score.Color = Palette.LeftPaddle;
 			}
 			else
 			{
-				score.Color = Color.White;
+				score.Color = Palette.Neutral;
 			}
 			score.Contents = Math.Abs(newScore).ToString();
 		};
@@ -87,6 +88,7 @@ internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBou
 		{
 			MediaPlayer.Stop();
 		}
+		MediaPlayer.Volume = settings.Volume / 10.0f;
 		MediaPlayer.Play(music);
 	}
 }
