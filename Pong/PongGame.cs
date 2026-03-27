@@ -1,4 +1,5 @@
 ﻿using GameFrame.Core;
+using GameFrame.Core.Input;
 using GameFrame.Core.Interfaces;
 using GameFrame.Core.Management;
 using Microsoft.Xna.Framework.Content;

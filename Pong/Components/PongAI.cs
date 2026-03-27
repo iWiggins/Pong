@@ -10,17 +10,14 @@ internal class PongAI(Ball ball, Paddle paddle, Field field, double difficulty) 
 	{
 		// AI is always the right paddle. TODO: Genericize the math.
 
-		if(ball.Center.X < field.Center.X)
+		int deadzone = (int)(field.Center.X * 1.2);
+
+		if(ball.Center.X < deadzone)
 		{
 			paddle.Stop();
 		}
 		else
 		{
-			/*int delta = paddle.Left - ball.Right;
-			double displacement = field.Width/2 / delta;
-
-			paddle.Speed = displacement / 2;*/
-
 			double speed = Math.Abs((ball.Y - paddle.Y) * 1000 / (Math.Pow(ball.X - paddle.X, 2) + 100));
 
 			paddle.Speed = speed > difficulty ? difficulty : speed;

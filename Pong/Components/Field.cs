@@ -41,7 +41,7 @@ internal class Field : GeometricComponent, IReset
 		};
 		if(AI)
 		{
-			_ai = new(Ball, RightPaddle, this, 2);
+			_ai = new(Ball, RightPaddle, this, 1.5);
 		}
 		else
 		{
@@ -61,8 +61,6 @@ internal class Field : GeometricComponent, IReset
 	public void Refresh()
 	{
 		Ball.Reset();
-		LeftPaddle.Reset();
-		RightPaddle.Reset();
 	}
 
 	private void CheckCollision(Wall wall)

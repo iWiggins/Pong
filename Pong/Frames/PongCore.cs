@@ -1,6 +1,7 @@
 ﻿using GameFrame.Components;
 using GameFrame.Components.Text;
 using GameFrame.Core;
+using GameFrame.Core.Input;
 using GameFrame.Core.Interfaces;
 using GameFrame.Layout;
 using Microsoft.Xna.Framework;
@@ -10,10 +11,12 @@ using Pong.Components;
 using System;
 
 namespace Pong.Frames;
-internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBoundsProvider bounds, Frame parent, bool AI) : Frame(spriteBatch, bounds)
+internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBoundsProvider bounds, IMouseCursor cursor, Frame parent, bool AI) : Frame(spriteBatch, bounds)
 {
 	protected override void PreInitialize()
 	{
+		Mouse.Cursor = cursor;
+		cursor.Enabled = false;
 		FlowLayout downflow = new(FlowLayout.Direction.Down)
 		{
 			Geometry = Screen.Bounds
@@ -69,7 +72,11 @@ internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBou
 	}
 
 	protected override void PostInitialize() => StartMusic();
-	protected override void PostReset() => StartMusic();
+	protected override void PostReset()
+	{
+		cursor.Enabled = false;
+		StartMusic();
+	}
 
 	void StartMusic()
 	{

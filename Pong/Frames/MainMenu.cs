@@ -2,6 +2,7 @@
 using GameFrame.Components.Buttons;
 using GameFrame.Components.Text;
 using GameFrame.Core;
+using GameFrame.Core.Input;
 using GameFrame.Core.Interfaces;
 using GameFrame.Layout;
 using Microsoft.Xna.Framework;
@@ -13,6 +14,13 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 {
 	protected override void PreInitialize()
 	{
+		int cursorSize = Screen.Bounds.Height / 50;
+		Mouse.Cursor = new MouseCursor(resources.TextureBall)
+		{
+			Width = cursorSize,
+			Height = cursorSize
+		};
+
 		FlowLayout outerLayout = new(FlowLayout.Direction.Down)
 		{
 			Geometry = Screen.Bounds
@@ -59,7 +67,7 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 			HoverColor = Color.Blue,
 			TextHoverColor = Color.Red
 		};
-		soloButton.Released += (b, p, dt) => Exit(new PongCore(resources, SpriteBatch, Screen, this, true));
+		soloButton.Released += (b, p, dt) => Exit(new PongCore(resources, SpriteBatch, Screen, Mouse.Cursor, this, true));
 		buttonLayout.AddChild(soloButton, 2);
 
 		buttonLayout.AddFiller(1);
@@ -72,7 +80,7 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 			HoverColor = Color.Blue,
 			TextHoverColor = Color.Red
 		};
-		duoButton.Released += (b, p, dt) => Exit(new PongCore(resources, SpriteBatch, Screen, this, false));
+		duoButton.Released += (b, p, dt) => Exit(new PongCore(resources, SpriteBatch, Screen, Mouse.Cursor, this, false));
 		buttonLayout.AddChild(duoButton, 2);
 
 		buttonLayout.AddFiller(1);
@@ -93,7 +101,11 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 	}
 
 	protected override void PostInitialize() => StartMusic();
-	protected override void PostReset() => StartMusic();
+	protected override void PostReset()
+	{
+		if(Mouse.Cursor is not null) Mouse.Cursor.Enabled = true;
+		StartMusic();
+	}
 
 	void StartMusic()
 	{
