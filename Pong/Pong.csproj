@@ -10,6 +10,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
     <Nullable>enable</Nullable>
+    <PublishAot>True</PublishAot>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Icon.ico" />

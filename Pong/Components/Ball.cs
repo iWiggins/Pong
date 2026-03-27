@@ -14,7 +14,7 @@ internal class Ball(Field field, Texture2D texture, SoundEffect ping, SoundEffec
 	public double Deviance { get; set; } = 0.2;
 
 	public delegate void BallBounceHandler(Wall wall);
-	public event BallBounceHandler BallBounced;
+	public event BallBounceHandler? BallBounced;
 
 	public bool Initialized { get; private set; } = false;
 
