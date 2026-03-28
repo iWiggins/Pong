@@ -10,15 +10,14 @@ using Microsoft.Xna.Framework.Media;
 using Pong.Data;
 
 namespace Pong.Frames;
-internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBoundsProvider bounds) : Frame(spriteBatch, bounds)
+internal class MainMenu(
+	ResourceManager resources,
+	SpriteBatch spriteBatch,
+	IBoundsProvider bounds,
+	PongSettings settings):
+	Frame(spriteBatch, bounds)
 {
-	public readonly PongSettings Settings = new()
-	{
-		LeftPaddle = Controller.WASD,
-		RightPaddle = Controller.CPU,
-		Volume = 10
-	};
-
+	public PongSettings Settings { get; } = settings;
 	protected override void PreInitialize()
 	{
 		int cursorSize = Screen.Bounds.Height / 50;

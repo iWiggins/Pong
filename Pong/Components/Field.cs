@@ -22,7 +22,10 @@ internal class Field : GeometricComponent, IReset
 
 	public Field(Keyboard keyboard, Mouse mouse, Texture2D ball, Texture2D paddle, SoundEffect ping, SoundEffect pong, PongSettings settings, Random rand)
 	{
-		Ball = new(this, ball, ping, pong, rand);
+		Ball = new(this, ball, ping, pong, rand)
+		{
+			Volume = settings.Volume
+		};
 		Ball.BallBounced += CheckCollision;
 		_children.Add(Ball);
 

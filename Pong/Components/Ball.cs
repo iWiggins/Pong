@@ -86,10 +86,11 @@ internal class Ball(Field field, Texture2D texture, SoundEffect ping, SoundEffec
 		{
 			var instance = pong.CreateInstance();
 			instance.Volume = Volume / 10.0f;
+			instance.Play();
 		}
 		else
 		{
-			float volume = 0.2f * (float)(Math.Abs(_xvelocity) + Math.Abs(_yvelocity)) * Volume / 10.0f;
+			float volume = 0.1f * (float)(Math.Abs(_xvelocity) + Math.Abs(_yvelocity)) * Volume / 10.0f;
 			if(volume > 1.0f) volume = 1.0f;
 			var instance = ping.CreateInstance();
 			instance.Volume = volume;

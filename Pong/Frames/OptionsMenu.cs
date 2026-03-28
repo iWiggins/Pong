@@ -9,7 +9,13 @@ using Microsoft.Xna.Framework.Graphics;
 using Pong.Data;
 
 namespace Pong.Frames;
-internal class OptionsMenu(IMouseCursor? cursor, ResourceManager resources, SpriteBatch spriteBatch, IBoundsProvider bounds, PongSettings settings, Frame parent):
+internal class OptionsMenu(
+	IMouseCursor? cursor,
+	ResourceManager resources,
+	SpriteBatch spriteBatch,
+	IBoundsProvider bounds,
+	PongSettings settings,
+	Frame parent):
 	Frame(spriteBatch, bounds)
 {
 	protected override void PreInitialize()
@@ -66,6 +72,8 @@ internal class OptionsMenu(IMouseCursor? cursor, ResourceManager resources, Spri
 		{
 			TextColor = Palette.Neutral
 		};
+		volume.ValueChanged += (oldValue, newValue) =>
+		settings.Volume = newValue;
 		midLayout.AddChild(volume);
 
 		midLayout.AddFiller();
