@@ -13,7 +13,9 @@ internal class ResourceManager(ContentManager content)
 
 	public Texture2D TextureWASD => content.Load<Texture2D>("textures/wasd");
 	public Texture2D TextureArrows => content.Load<Texture2D>("textures/arrows");
+	public Texture2D TextureMouse => content.Load<Texture2D>("textures/mouse"); 
 	public Texture2D TextureCPU => content.Load<Texture2D>("textures/cpu");
+	
 
 	public Texture2D TextureUp => content.Load<Texture2D>("textures/up");
 	public Texture2D TextureDown => content.Load<Texture2D>("textures/down");

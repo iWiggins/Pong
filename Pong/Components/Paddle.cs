@@ -1,4 +1,5 @@
 ﻿using GameFrame.Components;
+using GameFrame.Core.Input;
 using GameFrame.Core.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,11 +7,13 @@ using Pong.Data;
 using System;
 
 namespace Pong.Components;
-internal class Paddle(Field field, Texture2D texture): Image(texture), IInitialize, IReset, IUpdate
+internal class Paddle(Field field, Texture2D texture, Mouse mouse): Image(texture), IInitialize, IReset, IUpdate
 {
 	public required Wall Side { get; init; }
 
 	public bool Initialized { get; private set; } = false;
+
+	public bool MouseControl { get; set; }
 
 	public double Speed { get; set; } = 2;
 	public double Scale { get; set; } = 1;
@@ -57,9 +60,18 @@ internal class Paddle(Field field, Texture2D texture): Image(texture), IInitiali
 
 	public void Update(GameTime time)
 	{
-		Y += (int)(_velocity * time.ElapsedGameTime.TotalMilliseconds);
-		if(Top < field.Top) Top = field.Top;
-		else if(Bottom > field.Bottom) Bottom = field.Bottom;
+		if(MouseControl)
+		{
+			Y = mouse.Position.Y - Height / 2;
+			if(Top < field.Top) Top = field.Top;
+			else if(Bottom > field.Bottom) Bottom = field.Bottom;
+		}
+		else
+		{
+			Y += (int)(_velocity * time.ElapsedGameTime.TotalMilliseconds);
+			if(Top < field.Top) Top = field.Top;
+			else if(Bottom > field.Bottom) Bottom = field.Bottom;
+		}
 	}
 
 	private double _velocity = 0;

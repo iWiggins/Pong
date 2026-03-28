@@ -130,6 +130,18 @@
 /processorParam:TextureFormat=Color
 /build:textures/down.png
 
+#begin textures/mouse.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:textures/mouse.png
+
 #begin textures/paddle.png
 /importer:TextureImporter
 /processor:TextureProcessor

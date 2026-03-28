@@ -1,17 +1,11 @@
 ﻿using GameFrame.Components;
-using GameFrame.Components.Menu;
 using GameFrame.Components.Buttons;
+using GameFrame.Components.Menu;
 using GameFrame.Core;
 using GameFrame.Core.Interfaces;
 using GameFrame.Layout;
 using Microsoft.Xna.Framework.Graphics;
 using Pong.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
 
 namespace Pong.Frames;
 internal class OptionsMenu(ResourceManager resources, SpriteBatch spriteBatch, IBoundsProvider bounds, PongSettings settings, Frame parent):
@@ -47,6 +41,7 @@ internal class OptionsMenu(ResourceManager resources, SpriteBatch spriteBatch, I
 		Multiselector leftSelector = new([
 			new FramedImage(resources.TextureWASD),
 			new FramedImage(resources.TextureArrows),
+			new FramedImage(resources.TextureMouse),
 			new FramedImage(resources.TextureCPU)
 		])
 		{
@@ -76,6 +71,7 @@ internal class OptionsMenu(ResourceManager resources, SpriteBatch spriteBatch, I
 		Multiselector rightSelector = new([
 			new FramedImage(resources.TextureWASD),
 			new FramedImage(resources.TextureArrows),
+			new FramedImage(resources.TextureMouse),
 			new FramedImage(resources.TextureCPU)
 		])
 		{

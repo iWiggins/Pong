@@ -3,5 +3,6 @@ internal enum Controller
 {
 	WASD = 0,
 	Arrows = 1,
-	CPU = 2
+	Mouse = 2,
+	CPU = 3
 }

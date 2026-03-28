@@ -47,7 +47,15 @@ internal class PongCore(ResourceManager resources, SpriteBatch spriteBatch, IBou
 		};
 		stack.AddChild(background);
 
-		Field field = new(Keyboard, resources.TextureBall, resources.TexturePaddle, resources.SfxPing, resources.SfxPong, settings, new());
+		Field field = new(
+			Keyboard,
+			Mouse,
+			resources.TextureBall,
+			resources.TexturePaddle,
+			resources.SfxPing,
+			resources.SfxPong,
+			settings,
+			new());
 		stack.AddChild(field);
 
 		field.ScoreChanged += (oldScore, newScore) =>

@@ -20,13 +20,13 @@ internal class Field : GeometricComponent, IReset
 	public delegate void ScoreChangedHandler(int oldScore, int newScore);
 	public event ScoreChangedHandler? ScoreChanged;
 
-	public Field(Keyboard keyboard, Texture2D ball, Texture2D paddle, SoundEffect ping, SoundEffect pong, PongSettings settings, Random rand)
+	public Field(Keyboard keyboard, Mouse mouse, Texture2D ball, Texture2D paddle, SoundEffect ping, SoundEffect pong, PongSettings settings, Random rand)
 	{
 		Ball = new(this, ball, ping, pong, rand);
 		Ball.BallBounced += CheckCollision;
 		_children.Add(Ball);
 
-		LeftPaddle = new(this, paddle)
+		LeftPaddle = new(this, paddle, mouse)
 		{
 			Side = Wall.Left,
 			Color = Palette.LeftPaddle
@@ -35,7 +35,7 @@ internal class Field : GeometricComponent, IReset
 		_children.Add(LeftPaddle);
 		
 
-		RightPaddle = new(this, paddle)
+		RightPaddle = new(this, paddle, mouse)
 		{
 			Side = Wall.Right,
 			Color = Palette.RightPaddle
@@ -91,6 +91,9 @@ internal class Field : GeometricComponent, IReset
 				break;
 			case Controller.Arrows:
 				AddArrows(paddle, keyboard);
+				break;
+			case Controller.Mouse:
+				paddle.MouseControl = true;
 				break;
 			case Controller.CPU:
 			default:
