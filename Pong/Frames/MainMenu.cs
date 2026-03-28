@@ -5,7 +5,6 @@ using GameFrame.Core;
 using GameFrame.Core.Input;
 using GameFrame.Core.Interfaces;
 using GameFrame.Layout;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Pong.Data;
