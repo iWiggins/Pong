@@ -65,7 +65,10 @@ internal class OptionsMenu(ResourceManager resources, SpriteBatch spriteBatch, I
 			resources.FontNumber,
 			0,
 			10,
-			settings.Volume);
+			settings.Volume)
+		{
+			TextColor = Palette.Neutral
+		};
 		midLayout.AddChild(volume);
 
 		midLayout.AddFiller();
@@ -79,8 +82,8 @@ internal class OptionsMenu(ResourceManager resources, SpriteBatch spriteBatch, I
 			Current = (int)settings.RightPaddle
 		};
 
-		leftSelector.Changed += (oldValue, newValue) =>
-		settings.LeftPaddle = (Controller)newValue;
+		rightSelector.Changed += (oldValue, newValue) =>
+		settings.RightPaddle = (Controller)newValue;
 		midLayout.AddChild(rightSelector);
 
 		midLayout.AddFiller();

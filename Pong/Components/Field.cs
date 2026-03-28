@@ -116,7 +116,7 @@ internal class Field : GeometricComponent, IReset
 	}
 
 	private void AddCPU(Paddle paddle) =>
-		_children.Add(new PongAI(Ball, paddle, this, 2));
+		_children.Add(new PongAI(Ball, paddle, this, 1.5));
 
 	private readonly List<IComponent> _children = [];
 }

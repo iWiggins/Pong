@@ -20,6 +20,8 @@ internal class Ball(Field field, Texture2D texture, SoundEffect ping, SoundEffec
 
 	public bool Initialized { get; private set; } = false;
 
+	public int Direction => _xvelocity > 0 ? 1 : -1;
+
 	/// <summary>
 	/// Return the ball to starting position, reset speed, and randomize angle.
 	/// </summary>

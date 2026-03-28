@@ -6,18 +6,21 @@ using System;
 namespace Pong.Components;
 internal class PongAI(Ball ball, Paddle paddle, Field field, double difficulty) : Leaf, IUpdate
 {
-	int direction = paddle.X > field.X ? 1 : -1;
 	public void Update(GameTime time)
 	{
-		if(BallInDeadzone)
-		{
-			paddle.Stop();
-		}
-		else
+		int direction = paddle.Center.X > field.Center.X ? 1 : -1;
+
+		bool comingThisWay = ball.Direction == direction;
+
+		bool inDeadzone = direction > 0 ?
+		ball.Center.X < (int)(field.Left + field.Width * 0.5) :
+		ball.Center.X > (int)(field.Left + field.Width * 0.5);
+
+		if(comingThisWay && !inDeadzone)
 		{
 			int diff = direction > 0 ?
-				ball.X - paddle.X :
-				paddle.X - ball.X;
+				paddle.Center.X - ball.Center.X:
+				ball.Center.X - paddle.Center.X;
 			double speed = Math.Abs((ball.Y - paddle.Y) * 1000 / (Math.Pow(diff, 2) + 100));
 
 			paddle.Speed = speed > difficulty ? difficulty : speed;
@@ -25,9 +28,10 @@ internal class PongAI(Ball ball, Paddle paddle, Field field, double difficulty) 
 			if(paddle.Center.Y < ball.Center.Y) paddle.MoveDown();
 			else paddle.MoveUp();
 		}
+		else
+		{
+			paddle.Stop();
+		}
 	}
-
-	bool BallInDeadzone => direction > 0 ?
-		ball.Center.X < (int)(field.Center.X * 1.2) :
-		ball.Center.X > (int)(field.Center.X * 0.8);
+	
 }

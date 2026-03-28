@@ -16,7 +16,7 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 	public readonly PongSettings Settings = new()
 	{
 		LeftPaddle = Controller.WASD,
-		RightPaddle = Controller.Arrows,
+		RightPaddle = Controller.CPU,
 		Volume = 10
 	};
 
