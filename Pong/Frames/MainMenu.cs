@@ -88,7 +88,7 @@ internal class MainMenu(ResourceManager resources, SpriteBatch spriteBatch, IBou
 			HoverColor = Palette.RightPaddle,
 			TextHoverColor = Palette.LeftPaddle
 		};
-		optionsButton.Released += (b, p, dt) => Exit(new OptionsMenu(resources, SpriteBatch, Screen, Settings, this));
+		optionsButton.Released += (b, p, dt) => Exit(new OptionsMenu(Mouse.Cursor, resources, SpriteBatch, Screen, Settings, this));
 		buttonLayout.AddChild(optionsButton, 2);
 
 		buttonLayout.AddFiller(1);

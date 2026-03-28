@@ -2,17 +2,19 @@
 using GameFrame.Components.Buttons;
 using GameFrame.Components.Menu;
 using GameFrame.Core;
+using GameFrame.Core.Input;
 using GameFrame.Core.Interfaces;
 using GameFrame.Layout;
 using Microsoft.Xna.Framework.Graphics;
 using Pong.Data;
 
 namespace Pong.Frames;
-internal class OptionsMenu(ResourceManager resources, SpriteBatch spriteBatch, IBoundsProvider bounds, PongSettings settings, Frame parent):
+internal class OptionsMenu(IMouseCursor? cursor, ResourceManager resources, SpriteBatch spriteBatch, IBoundsProvider bounds, PongSettings settings, Frame parent):
 	Frame(spriteBatch, bounds)
 {
 	protected override void PreInitialize()
 	{
+		Mouse.Cursor = cursor;
 		FlowLayout outerLayout = new(FlowLayout.Direction.Down)
 		{
 			Geometry = Screen.Bounds
