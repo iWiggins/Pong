@@ -4,6 +4,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 
 namespace Pong;
+/// <summary>
+/// A convenience class to cut down on how much we need to type Content.Load
+/// in the rest of the program.
+/// </summary>
+/// <param name="content">The game's ContentManager</param>
 internal class ResourceManager(ContentManager content)
 {
 	public Texture2D TextureBackground => content.Load<Texture2D>("textures/background");

@@ -1,4 +1,7 @@
 ﻿namespace Pong.Data;
+/// <summary>
+/// Represents what is controlling a paddle.
+/// </summary>
 internal enum Controller
 {
 	WASD = 0,

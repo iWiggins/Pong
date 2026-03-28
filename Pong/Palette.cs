@@ -1,11 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pong;
+/// <summary>
+/// Constants for the colors used,
+/// to improve consistency and make changes easier.
+/// </summary>
 internal static class Palette
 {
 	public static Color Neutral => Color.White;
