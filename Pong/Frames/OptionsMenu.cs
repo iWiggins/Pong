@@ -145,8 +145,13 @@ internal class OptionsMenu(
 			HoverColor = Palette.RightPaddle,
 			TextHoverColor = Palette.LeftPaddle
 		};
-		// Create an event handler so we switch back to the main menu when back is pressed.
-		backButton.Released += (b, p, dt) => Exit(parent);
+		// Create an event handler so we save the settings
+		// and switch back to the main menu when back is pressed.
+		backButton.Released += (b, p, dt) =>
+		{
+			settings.Save();
+			Exit(parent);
+		};
 		buttonFlow.AddChild(backButton);
 
 		// Blank space to the right of the back button.

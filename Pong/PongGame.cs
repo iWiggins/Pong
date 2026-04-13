@@ -16,13 +16,7 @@ internal class PongGame : ManagedGame
 {
 	protected override Frame CreateFirstFrame(ContentManager content, SpriteBatch sprites, IBoundsProvider bounds)
 	{
-		// Create some default settings.
-		PongSettings settings = new()
-		{
-			LeftPaddle = Controller.WASD,
-			RightPaddle = Controller.CPU,
-			Volume = 5
-		};
+		PongSettings settings = PongSettings.Load();
 
 		// Create the main menu.
 		// The first parameter creates a ResourceManager wrapping the ContentManager.
