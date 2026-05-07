@@ -5,6 +5,10 @@ namespace Pong.Data;
 /// <summary>
 /// The game settings.
 /// </summary>
+/// <remarks>
+/// This class is designed to read from and write to a JSON file.
+/// That's why all of its values are public properties.
+/// </remarks>
 internal class PongSettings
 {
 	/// <summary>
@@ -29,8 +33,14 @@ internal class PongSettings
 
 	public static string SettingsFile => "pong.json";
 
+	/// <summary>
+	/// Load the settings from a JSON file.
+	/// If the file is not found, load default settings.
+	/// </summary>
+	/// <returns>A populated PongSettings object.</returns>
 	public static PongSettings Load()
 	{
+		// If the settings file exists, read it.
 		if(File.Exists(SettingsFile))
 		{
 			using FileStream stream = new(SettingsFile, FileMode.Open);
@@ -51,6 +61,9 @@ internal class PongSettings
 		return defaultSettings;
 	}
 
+	/// <summary>
+	/// Save the settings to a JSON file.
+	/// </summary>
 	public void Save()
 	{
 		using FileStream stream = new(SettingsFile, FileMode.OpenOrCreate);
@@ -58,6 +71,12 @@ internal class PongSettings
 	}
 }
 
+/// <summary>
+/// This context is needed because the game compiles to native code.
+/// The native compilation disables reflection that would have been used
+/// to automatically analyze this class at runtime, preventing serialization.
+/// Adding this triggers that analysis at compile time instead.
+/// </summary>
 [JsonSourceGenerationOptions(WriteIndented = true)]
 [JsonSerializable(typeof(PongSettings))]
 internal partial class SettingsGenerationContext : JsonSerializerContext { }

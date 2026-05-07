@@ -11,6 +11,9 @@ namespace Pong.Components;
 /// <param name="paddle">The paddle being controlled.</param>
 /// <param name="field">A reference to the field.</param>
 /// <param name="difficulty">Difficulty is just the maximum speed of the paddle.</param>
+/// <remarks>
+/// PongAI inherits Leaf because it is a component that has no children.
+/// </remarks>
 internal class PongAI(Ball ball, Paddle paddle, Field field, double difficulty) : Leaf, IUpdate
 {
 	public void Update(GameTime time)
@@ -40,7 +43,7 @@ internal class PongAI(Ball ball, Paddle paddle, Field field, double difficulty) 
 			double speed = Math.Abs((ball.Y - paddle.Y) * 1000 / (Math.Pow(diff, 2) + 100));
 
 			// Put a cap on how fast the paddle can move (difficulty)
-			paddle.Speed = speed > difficulty ? difficulty : speed;
+			paddle.Speed = Math.Max(difficulty, speed);
 
 			// If the ball is below us, move down. Otherwise, move up.
 			if(paddle.Center.Y < ball.Center.Y) paddle.MoveDown();

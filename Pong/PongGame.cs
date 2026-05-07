@@ -10,7 +10,7 @@ using Pong.Frames;
 namespace Pong;
 /// <summary>
 /// The game class for Pong.
-/// Initializes default settings and creates a <see cref="MainMenu"/>.
+/// Initializes settings and goes to the <see cref="MainMenu"/>.
 /// </summary>
 internal class PongGame : ManagedGame
 {

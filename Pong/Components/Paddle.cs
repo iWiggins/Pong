@@ -13,6 +13,10 @@ namespace Pong.Components;
 /// <param name="field">A reference to the field the paddle belongs to.</param>
 /// <param name="texture">The paddle image's texture.</param>
 /// <param name="mouse">A reference to the mouse.</param>
+/// <remarks>
+/// Paddle inherits Image because it needs to show up on screen,
+/// and it doesn't have any further children.
+/// </remarks>
 internal class Paddle(Field field, Texture2D texture, Mouse mouse): Image(texture), IInitialize, IReset, IUpdate
 {
 	/// <summary>

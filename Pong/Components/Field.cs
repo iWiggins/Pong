@@ -11,6 +11,10 @@ namespace Pong.Components;
 /// <summary>
 /// A component containing the main pong animate gameplay: The paddles and ball.
 /// </summary>
+/// <remarks>
+/// Field inherits GeometricComponent because it has a position and size on screen,
+/// and because we need to manually set up its children (the ball and paddles).
+/// </remarks>
 internal class Field : GeometricComponent, IReset
 {
 	public readonly Ball Ball;

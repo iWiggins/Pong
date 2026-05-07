@@ -15,6 +15,10 @@ namespace Pong.Components;
 /// <param name="ping">A sound effect for bouncing off walls.</param>
 /// <param name="pong">A sound effect for scores.</param>
 /// <param name="rand">A random number generator.</param>
+/// <remarks>
+/// Ball inherits Image because it needs to be visible on screen,
+/// and it doesn't have any further children.
+/// </remarks>
 internal class Ball(Field field, Texture2D texture, SoundEffect ping, SoundEffect pong, Random rand) : Image(texture), IInitialize, IUpdate, IReset
 {
 	/// <summary>
@@ -34,7 +38,7 @@ internal class Ball(Field field, Texture2D texture, SoundEffect ping, SoundEffec
 	/// </summary>
 	public double Deviance { get; set; } = 0.2;
 	/// <summary>
-	/// THe volume of the ball's sound effects.
+	/// The volume of the ball's sound effects.
 	/// </summary>
 	public int Volume { get; set; } = 10;
 
