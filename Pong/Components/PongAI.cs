@@ -40,10 +40,10 @@ internal class PongAI(Ball ball, Paddle paddle, Field field, double difficulty) 
 				ball.Center.X - paddle.Center.X;
 			// Then calculate the speed the palddle should move based on the difference
 			// between the ball's Y and the paddle's Y, scaled up, and squared into a quadratic curve.
-			double speed = Math.Abs((ball.Y - paddle.Y) * 1000 / (Math.Pow(diff, 2) + 100));
+			double speed = Math.Abs((ball.Y - paddle.Y) * 1000 / (Math.Pow(diff, 2) + Math.Pow(field.Width / 250, 2)));
 
 			// Put a cap on how fast the paddle can move (difficulty)
-			paddle.Speed = Math.Max(difficulty, speed);
+			paddle.Speed = Math.Min(difficulty, speed);
 
 			// If the ball is below us, move down. Otherwise, move up.
 			if(paddle.Center.Y < ball.Center.Y) paddle.MoveDown();
